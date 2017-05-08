@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Timer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <label for="minutes">Minutes</label><input id="minutes" type="text" name="minutes">
+    <br />
+    <br />
+    <label for="seconds">Seconds</label><input id="seconds" type="text" name="seconds">
+    <br />
+    <br />
+    <input type="submit" name="submit" id="submit">
+    <h1 id="time"></h1>
+    <script>
+      var onSubmit = document.getElementById('submit');
+      function startTimer(duration, display) {
+          var start = Date.now(),
+              diff,
+              minutes,
+              seconds,
+              timing;
+          function timer() {
+              diff = duration - (((Date.now() - start) / 1000) | 0);
+              minutes = (diff / 60) | 0;
+              seconds = (diff % 60) | 0;
+
+              minutes = minutes < 10 ? "0" + minutes : minutes;
+              seconds = seconds < 10 ? "0" + seconds : seconds;
+
+              display.textContent = minutes + ":" + seconds; 
+              if (diff <= 0) {
+                  start = Date.now() + 1000;
+                  if (diff == 0) {
+                    clearInterval(timing);
+                  }
+              }
+          };
+          timer();
+          timing = setInterval(timer, 1000);
+      }
+
+      function getTime() {
+        var minutes = document.getElementById('minutes').value || 0;
+        var seconds = document.getElementById('seconds').value || 0;
+        return {
+          minutes: +minutes,
+          seconds: +seconds
+        }
+      }
+
+      onSubmit.onclick = function() {
+        var time = (getTime().minutes * 60) + getTime().seconds;
+        display = document.querySelector('#time');
+        startTimer(time, display);
+      }
+    </script>
+  </body>
+</html>
